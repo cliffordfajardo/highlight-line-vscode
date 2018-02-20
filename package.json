@@ -47,6 +47,12 @@
                     ],
                     "default": "2px"
                 },
+                "highlightLine.backgroundColor": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": "#fffedd"
+                },
                 "highlightLine.borderStyle": {
                     "type": [
                         "string"
@@ -58,7 +64,8 @@
                         "double",
                         "groove",
                         "outset",
-                        "ridge"
+                        "ridge",
+                        "none"
                     ],
                     "default": "solid"
                 }
