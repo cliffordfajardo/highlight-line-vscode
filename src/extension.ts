@@ -92,11 +92,13 @@ function getDecorationTypeFromConfig() {
     const borderColor = config.get("borderColor");
     const borderWidth = config.get("borderWidth");
     const borderStyle = config.get("borderStyle");
+    const backgroundColor = config.get("backgroundColor");
     const decorationType = window.createTextEditorDecorationType({
         isWholeLine: true,
         borderWidth: `0 0 ${borderWidth} 0`,
         borderStyle: `${borderStyle}`, //TODO: file bug, this shouldn't throw a lint error.
-        borderColor
+        borderColor,
+        backgroundColor: backgroundColor === "none" ? null : backgroundColor
     })
     return decorationType;
 }
