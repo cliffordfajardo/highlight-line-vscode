@@ -97,7 +97,8 @@ function getDecorationTypeFromConfig() {
         borderStyle: `solid`, //TODO: file bug, this shouldn't throw a lint error.
         borderColor: `red`
     };
-    let allStyles = config.get("allStyles");
+    let allStyles;
+    allStyles = config.get("allStyles");
     if (allStyles.highPriority) {
         value.borderColor = config.get("borderColor");
         value.borderStyle = config.get("borderStyle");
