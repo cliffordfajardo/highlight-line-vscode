@@ -61,6 +61,19 @@
                         "ridge"
                     ],
                     "default": "solid"
+                },
+                "highlightLine.allStyles":{
+                    "type":[
+                        "object"
+                    ],
+                    "default":{
+                        "highPriority": false,
+                        "isWholeLine": true,
+                        "borderWidth": "0 0 2px 0",
+                        "borderStyle": "solid",
+                        "borderColor": "red"
+                     },
+                    "description": "set DecorationRenderOptions json type. This property set is  overwrited, if highPriority is false."
                 }
             }
         }
@@ -73,9 +86,9 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
+        "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.11"
     }
 }
