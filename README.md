@@ -46,3 +46,10 @@ Through the configuration options, you can edit appearance of your hilighted lin
   </tr>
   </table>
 
+
+### Thank You
+> Thanks checking out my extension! I'm mostly hang out on [twitter](https://twitter.com/cliffordfajard0), ask me questions or let's talk!
+
+<a href="https://twitter.com/cliffordfajard0"><img src="https://img.shields.io/twitter/follow/cliffordfajard0?style=social" alt="Twitter Profile Badge"/></a>
+
+
