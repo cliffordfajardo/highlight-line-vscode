@@ -1,6 +1,6 @@
 
-'use strict'
-import { commands, ExtensionContext, window, workspace, Range, Position} from 'vscode'
+'use strict';
+import { commands, ExtensionContext, window, workspace, Range, Position } from 'vscode';
 import { setTimeout } from 'timers';
 
 export async function activate(context: ExtensionContext) {
@@ -19,10 +19,10 @@ export async function activate(context: ExtensionContext) {
      */
     window.onDidChangeActiveTextEditor(() => {
         try {
-            activeEditor = window.activeTextEditor
-            updateDecorations(decorationType)
+            activeEditor = window.activeTextEditor;
+            updateDecorations(decorationType);
         } catch (error){
-            console.error("Error from ' window.onDidChangeActiveTextEditor' -->", error)
+            console.error("Error from ' window.onDidChangeActiveTextEditor' -->", error);
         } finally {
             lastActivePosition = new Position(activeEditor.selection.active.line, activeEditor.selection.active.character);
         }
@@ -33,11 +33,11 @@ export async function activate(context: ExtensionContext) {
      * a decoration.
      */
     window.onDidChangeTextEditorSelection(() => {
-        activeEditor = window.activeTextEditor;   
+        activeEditor = window.activeTextEditor;
         updateDecorations(decorationType);
     })
     /**
-     * 
+     *
      * @param decorationType - defines our decorations settings.
      */
     function updateDecorations(decorationType, updateAllVisibleEditors=false) {
@@ -54,23 +54,25 @@ export async function activate(context: ExtensionContext) {
             //edit only currently active editor
             else {
                 window.visibleTextEditors.forEach((editor) => {
-                    if(editor !== window.activeTextEditor) return;
-                    
-                    const currentPosition = editor.selection.active
-                    const editorHasChangedLines = lastActivePosition.line !== currentPosition.line
+                    if(editor !== window.activeTextEditor || lastActivePosition == undefined) return;
+
+                    const currentPosition = editor.selection.active;
+                    const editorHasChangedLines = lastActivePosition.line !== currentPosition.line;
                     const isNewEditor = activeEditor.document.lineCount === 1 && lastActivePosition.line === 0 && lastActivePosition.character == 0;
-                    const newDecoration = { range: new Range(currentPosition, currentPosition) }
-                    
+                    const newDecoration = { range: new Range(currentPosition, currentPosition) };
+
                     if(editorHasChangedLines || isNewEditor){
-                        editor.setDecorations(decorationType, [newDecoration])
+                        editor.setDecorations(decorationType, [newDecoration]);
                     }
                 });
             }
-        } 
+        }
         catch (error){
-            console.error("Error from ' updateDecorations' -->", error)
+            console.error("Error from ' updateDecorations' -->", error);
         } finally {
-            lastActivePosition = new Position(activeEditor.selection.active.line, activeEditor.selection.active.character);
+            if (activeEditor != undefined) {
+                lastActivePosition = new Position(activeEditor.selection.active.line, activeEditor.selection.active.character);
+            }
         }
 
 
@@ -80,7 +82,7 @@ export async function activate(context: ExtensionContext) {
         //clear all decorations
         decorationType.dispose();
         decorationType = getDecorationTypeFromConfig();
-        updateDecorations(decorationType, true)
+        updateDecorations(decorationType, true);
     })
 }
 
@@ -88,16 +90,27 @@ export async function activate(context: ExtensionContext) {
 
 //UTILITIES
 function getDecorationTypeFromConfig() {
-    const config = workspace.getConfiguration("highlightLine")
-    const borderColor = config.get("borderColor");
-    const borderWidth = config.get("borderWidth");
-    const borderStyle = config.get("borderStyle");
-    const decorationType = window.createTextEditorDecorationType({
+    const config = workspace.getConfiguration("highlightLine");
+    let value = {
         isWholeLine: true,
-        borderWidth: `0 0 ${borderWidth} 0`,
-        borderStyle: `${borderStyle}`, //TODO: file bug, this shouldn't throw a lint error.
-        borderColor
-    })
+        borderWidth: `0 0 2px 0`,
+        borderStyle: `solid`, //TODO: file bug, this shouldn't throw a lint error.
+        borderColor: `red`
+    };
+    let allStyles;
+    allStyles = config.get("allStyles");
+    if (allStyles.highPriority) {
+        value.borderColor = config.get("borderColor");
+        value.borderStyle = config.get("borderStyle");
+        value.borderWidth = `0 0 ${config.get("borderWidth")} 0`;
+        value = Object.assign(value, allStyles);
+    } else {
+        value = Object.assign(allStyles, value);
+        value.borderColor = config.get("borderColor");
+        value.borderStyle = config.get("borderStyle");
+        value.borderWidth = `0 0 ${config.get("borderWidth")} 0`;
+    }
+    const decorationType = window.createTextEditorDecorationType(value);
     return decorationType;
 }
 
